@@ -19,24 +19,38 @@ public class QuestionController {
         this.questionRepository = questionRepository;
     }
 
-    // Public: list distinct categories students can browse (no auth needed to see the catalog)
+    // ===========================
+    // PUBLIC ENDPOINTS
+    // ===========================
+
+    // Get all questions (Public)
+    @GetMapping("/api/questions")
+    public ResponseEntity<List<Question>> getAllQuestions() {
+        return ResponseEntity.ok(questionRepository.findAll());
+    }
+
+    // Get all categories (Public)
     @GetMapping("/api/questions/public/categories")
     public ResponseEntity<List<String>> getCategories() {
         List<String> categories = questionRepository.findAll().stream()
                 .map(Question::getCategory)
                 .distinct()
                 .toList();
+
         return ResponseEntity.ok(categories);
     }
 
-    // Search questions by category or topic keyword (authenticated users)
+    // Search questions (Public)
     @GetMapping("/api/questions/search")
     public ResponseEntity<List<Question>> search(@RequestParam String keyword) {
         return ResponseEntity.ok(
-                questionRepository.findByCategoryContainingIgnoreCaseOrTopicContainingIgnoreCase(keyword, keyword));
+                questionRepository.findByCategoryContainingIgnoreCaseOrTopicContainingIgnoreCase(keyword, keyword)
+        );
     }
 
-    // ---------- Admin: full CRUD on questions ----------
+    // ===========================
+    // ADMIN ENDPOINTS
+    // ===========================
 
     @GetMapping("/api/admin/questions")
     public ResponseEntity<List<Question>> getAll() {
@@ -49,9 +63,12 @@ public class QuestionController {
     }
 
     @PutMapping("/api/admin/questions/{id}")
-    public ResponseEntity<Question> update(@PathVariable Long id, @Valid @RequestBody Question updated) {
+    public ResponseEntity<Question> update(@PathVariable Long id,
+                                           @Valid @RequestBody Question updated) {
+
         Question existing = questionRepository.findById(id)
-                .orElseThrow(() -> new ApiException("Question not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() ->
+                        new ApiException("Question not found", HttpStatus.NOT_FOUND));
 
         existing.setCategory(updated.getCategory());
         existing.setTopic(updated.getTopic());
