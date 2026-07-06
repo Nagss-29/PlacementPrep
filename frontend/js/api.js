@@ -1,14 +1,15 @@
 // ============================================
 // PlacementPrep — API helper
-// Centralizes all backend calls & JWT handling
 // ============================================
 
-const API_BASE_URL = "http://localhost:8080/api";
+// Change this to your Render Backend URL
+const API_BASE_URL = "https://placementprep-3tdi.onrender.com/api";
 
 const Auth = {
     getToken() {
         return localStorage.getItem("pp_token");
     },
+
     setSession(authResponse) {
         localStorage.setItem("pp_token", authResponse.token);
         localStorage.setItem("pp_user", JSON.stringify({
@@ -18,18 +19,22 @@ const Auth = {
             role: authResponse.role
         }));
     },
+
     getUser() {
         const raw = localStorage.getItem("pp_user");
         return raw ? JSON.parse(raw) : null;
     },
+
     isLoggedIn() {
         return !!this.getToken();
     },
+
     logout() {
         localStorage.removeItem("pp_token");
         localStorage.removeItem("pp_user");
         window.location.href = "login.html";
     },
+
     requireAuth() {
         if (!this.isLoggedIn()) {
             window.location.href = "login.html";
@@ -38,7 +43,10 @@ const Auth = {
 };
 
 async function apiRequest(path, { method = "GET", body = null, auth = true } = {}) {
-    const headers = { "Content-Type": "application/json" };
+
+    const headers = {
+        "Content-Type": "application/json"
+    };
 
     if (auth && Auth.getToken()) {
         headers["Authorization"] = `Bearer ${Auth.getToken()}`;
@@ -51,43 +59,62 @@ async function apiRequest(path, { method = "GET", body = null, auth = true } = {
     });
 
     if (response.status === 401) {
-        // Token expired or invalid — send back to login
         Auth.logout();
         return;
     }
 
     const contentType = response.headers.get("content-type") || "";
-    const data = contentType.includes("application/json") ? await response.json() : null;
+
+    const data = contentType.includes("application/json")
+        ? await response.json()
+        : null;
 
     if (!response.ok) {
-        const message = (data && data.message) || "Something went wrong. Please try again.";
+        const message = (data && data.message)
+            ? data.message
+            : "Something went wrong.";
+
         throw new Error(message);
     }
 
     return data;
 }
 
-// Simple toast notification helper used across pages
+// Toast
 function showToast(message, type = "info") {
+
     const toast = document.createElement("div");
+
     toast.className = "pp-toast";
-    if (type === "error") toast.style.background = "#dc2626";
-    if (type === "success") toast.style.background = "#16a34a";
+
+    if (type === "error")
+        toast.style.background = "#dc2626";
+
+    if (type === "success")
+        toast.style.background = "#16a34a";
+
     toast.textContent = message;
+
     document.body.appendChild(toast);
+
     setTimeout(() => toast.remove(), 3000);
 }
 
-// Dark mode toggle, persisted in localStorage
+// Theme
 function initTheme() {
     const saved = localStorage.getItem("pp_theme") || "light";
     document.documentElement.setAttribute("data-theme", saved);
 }
 
 function toggleTheme() {
-    const current = document.documentElement.getAttribute("data-theme") || "light";
+
+    const current =
+        document.documentElement.getAttribute("data-theme") || "light";
+
     const next = current === "light" ? "dark" : "light";
+
     document.documentElement.setAttribute("data-theme", next);
+
     localStorage.setItem("pp_theme", next);
 }
 
