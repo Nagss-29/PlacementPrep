@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — PlacementPrep</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-pp">
+    <div class="container">
+        <a class="navbar-brand brand" href="admin.html">PlacementPrep <span class="badge bg-primary">Admin</span></a>
+        <button class="btn btn-pp-outline" onclick="Auth.logout()">Logout</button>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0">Manage Questions</h3>
+        <button class="btn btn-pp-primary" data-bs-toggle="modal" data-bs-target="#questionModal" onclick="openCreateModal()">+ Add Question</button>
+    </div>
+
+    <div class="card-pp card-pp-body">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th><th>Category</th><th>Topic</th><th>Question</th>
+                        <th>Difficulty</th><th>Company</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="questionsTableBody">
+                    <tr><td colspan="7" class="text-center text-muted-pp py-4">Loading questions...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Question Modal -->
+<div class="modal fade" id="questionModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Add Question</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="questionForm">
+                    <input type="hidden" id="questionId">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Category</label>
+                            <input type="text" id="category" class="form-control form-control-pp" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Topic</label>
+                            <input type="text" id="topic" class="form-control form-control-pp">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Question Text</label>
+                            <textarea id="questionText" class="form-control form-control-pp" rows="2" required></textarea>
+                        </div>
+                        <div class="col-md-6"><label class="form-label">Option A</label><input type="text" id="optionA" class="form-control form-control-pp" required></div>
+                        <div class="col-md-6"><label class="form-label">Option B</label><input type="text" id="optionB" class="form-control form-control-pp" required></div>
+                        <div class="col-md-6"><label class="form-label">Option C</label><input type="text" id="optionC" class="form-control form-control-pp" required></div>
+                        <div class="col-md-6"><label class="form-label">Option D</label><input type="text" id="optionD" class="form-control form-control-pp" required></div>
+                        <div class="col-md-4">
+                            <label class="form-label">Correct Answer</label>
+                            <select id="correctAnswer" class="form-control form-control-pp" required>
+                                <option value="A">A</option><option value="B">B</option>
+                                <option value="C">C</option><option value="D">D</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Difficulty</label>
+                            <select id="difficulty" class="form-control form-control-pp" required>
+                                <option value="EASY">Easy</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="HARD">Hard</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Company Tag</label>
+                            <input type="text" id="company" class="form-control form-control-pp" placeholder="Zoho, TCS...">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Explanation</label>
+                            <textarea id="explanation" class="form-control form-control-pp" rows="2"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-pp-outline" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-pp-primary" onclick="saveQuestion()">Save Question</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
+<script>
+Auth.requireAuth();
+let questionModal;
+let editingId = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+    questionModal = new bootstrap.Modal(document.getElementById("questionModal"));
+    loadQuestions();
+});
+
+async function loadQuestions() {
+    try {
+        const questions = await apiRequest("/admin/questions");
+        const tbody = document.getElementById("questionsTableBody");
+
+        if (!questions.length) {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted-pp py-4">No questions yet. Add your first one!</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = questions.map(q => `
+            <tr>
+                <td>${q.id}</td>
+                <td>${q.category}</td>
+                <td>${q.topic || "-"}</td>
+                <td style="max-width:300px;" class="text-truncate">${q.questionText}</td>
+                <td><span class="badge bg-secondary">${q.difficulty}</span></td>
+                <td>${q.company || "-"}</td>
+                <td>
+                    <button class="btn btn-sm btn-pp-outline me-1" onclick='openEditModal(${JSON.stringify(q).replace(/'/g, "&apos;")})'>Edit</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteQuestion(${q.id})">Delete</button>
+                </td>
+            </tr>
+        `).join("");
+    } catch (err) {
+        showToast(err.message, "error");
+    }
+}
+
+function openCreateModal() {
+    editingId = null;
+    document.getElementById("modalTitle").textContent = "Add Question";
+    document.getElementById("questionForm").reset();
+}
+
+function openEditModal(q) {
+    editingId = q.id;
+    document.getElementById("modalTitle").textContent = "Edit Question";
+    document.getElementById("category").value = q.category;
+    document.getElementById("topic").value = q.topic || "";
+    document.getElementById("questionText").value = q.questionText;
+    document.getElementById("optionA").value = q.optionA;
+    document.getElementById("optionB").value = q.optionB;
+    document.getElementById("optionC").value = q.optionC;
+    document.getElementById("optionD").value = q.optionD;
+    document.getElementById("correctAnswer").value = q.correctAnswer;
+    document.getElementById("difficulty").value = q.difficulty;
+    document.getElementById("company").value = q.company || "";
+    document.getElementById("explanation").value = q.explanation || "";
+    questionModal.show();
+}
+
+async function saveQuestion() {
+    const payload = {
+        category: document.getElementById("category").value,
+        topic: document.getElementById("topic").value,
+        questionText: document.getElementById("questionText").value,
+        optionA: document.getElementById("optionA").value,
+        optionB: document.getElementById("optionB").value,
+        optionC: document.getElementById("optionC").value,
+        optionD: document.getElementById("optionD").value,
+        correctAnswer: document.getElementById("correctAnswer").value,
+        difficulty: document.getElementById("difficulty").value,
+        company: document.getElementById("company").value,
+        explanation: document.getElementById("explanation").value
+    };
+
+    try {
+        if (editingId) {
+            await apiRequest(`/admin/questions/${editingId}`, { method: "PUT", body: payload });
+            showToast("Question updated!", "success");
+        } else {
+            await apiRequest("/admin/questions", { method: "POST", body: payload });
+            showToast("Question added!", "success");
+        }
+        questionModal.hide();
+        loadQuestions();
+    } catch (err) {
+        showToast(err.message, "error");
+    }
+}
+
+async function deleteQuestion(id) {
+    if (!confirm("Delete this question permanently?")) return;
+    try {
+        await apiRequest(`/admin/questions/${id}`, { method: "DELETE" });
+        showToast("Question deleted", "success");
+        loadQuestions();
+    } catch (err) {
+        showToast(err.message, "error");
+    }
+}
+</script>
+</body>
+</html>

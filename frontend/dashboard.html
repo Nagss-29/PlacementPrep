@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — PlacementPrep</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-pp">
+    <div class="container">
+        <a class="navbar-brand brand" href="dashboard.html">PlacementPrep</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+                <li class="nav-item"><a class="nav-link active" href="dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#categories">Practice</a></li>
+                <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+                <li class="nav-item"><button class="btn btn-sm btn-pp-outline" onclick="toggleTheme()">🌓</button></li>
+                <li class="nav-item"><button class="btn btn-pp-outline ms-lg-2" onclick="Auth.logout()">Logout</button></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <h3 class="mb-1">Welcome back, <span id="welcomeName">Student</span> 👋</h3>
+    <p class="text-muted-pp mb-4">Here's how your preparation is going.</p>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-2 col-6"><div class="stat-card"><div class="stat-value" id="statTotalTests">0</div><div class="stat-label">Total Tests</div></div></div>
+        <div class="col-md-2 col-6"><div class="stat-card"><div class="stat-value" id="statHighestScore">0</div><div class="stat-label">Highest Score</div></div></div>
+        <div class="col-md-2 col-6"><div class="stat-card"><div class="stat-value" id="statAvgScore">0</div><div class="stat-label">Average Score</div></div></div>
+        <div class="col-md-2 col-6"><div class="stat-card"><div class="stat-value" id="statAccuracy">0%</div><div class="stat-label">Accuracy</div></div></div>
+        <div class="col-md-2 col-6"><div class="stat-card"><div class="stat-value" id="statStreak">0</div><div class="stat-label">Day Streak 🔥</div></div></div>
+        <div class="col-md-2 col-6"><div class="stat-card"><div class="stat-value" id="statAttempted">0</div><div class="stat-label">Questions Done</div></div></div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-8">
+            <div class="card-pp card-pp-body">
+                <h5 class="mb-3">Recent Activity</h5>
+                <div id="recentActivityList">
+                    <p class="text-muted-pp">Loading...</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-pp card-pp-body text-center">
+                <h5 class="mb-3">Continue Practice</h5>
+                <p class="text-muted-pp small">Jump back into a category and keep your streak alive.</p>
+                <a href="index.html#categories" class="btn btn-pp-primary w-100">Choose a Category</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

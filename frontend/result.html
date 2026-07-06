@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Result — PlacementPrep</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-pp">
+    <div class="container">
+        <a class="navbar-brand brand" href="dashboard.html">PlacementPrep</a>
+        <button class="btn btn-pp-outline" onclick="Auth.logout()">Logout</button>
+    </div>
+</nav>
+
+<div class="container py-4" id="resultContainer">
+    <h3 class="text-center mb-4">Quiz Result</h3>
+
+    <div class="row g-3 mb-4 text-center">
+        <div class="col-md-2 col-6"><div class="stat-card"><div class="stat-value" id="scoreValue">-</div><div class="stat-label">Score</div></div></div>
+        <div class="col-md-2 col-6"><div class="stat-card"><div class="stat-value" id="percentageValue">-</div><div class="stat-label">Percentage</div></div></div>
+        <div class="col-md-2 col-6"><div class="stat-card"><div class="stat-value" id="correctValue">-</div><div class="stat-label">Correct</div></div></div>
+        <div class="col-md-2 col-6"><div class="stat-card"><div class="stat-value" id="wrongValue">-</div><div class="stat-label">Wrong</div></div></div>
+        <div class="col-md-2 col-6"><div class="stat-card"><div class="stat-value" id="skippedValue">-</div><div class="stat-label">Skipped</div></div></div>
+        <div class="col-md-2 col-6"><div class="stat-card"><div class="stat-value" id="accuracyValue">-</div><div class="stat-label">Accuracy</div></div></div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card-pp card-pp-body text-center">
+                <h6 class="mb-3">Performance Breakdown</h6>
+                <canvas id="performanceChart" height="220"></canvas>
+                <p class="text-muted-pp small mt-3 mb-0">Time taken: <span id="timeTakenValue">-</span></p>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0">Answer Review</h6>
+                <div>
+                    <a href="index.html#categories" class="btn btn-pp-outline btn-sm">Retake / New Quiz</a>
+                    <a href="dashboard.html" class="btn btn-pp-primary btn-sm">Back to Dashboard</a>
+                </div>
+            </div>
+            <div id="reviewContainer" style="max-height: 480px; overflow-y: auto;"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/result.js"></script>
+</body>
+</html>

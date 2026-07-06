@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile — PlacementPrep</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-pp">
+    <div class="container">
+        <a class="navbar-brand brand" href="dashboard.html">PlacementPrep</a>
+        <div>
+            <a class="btn btn-pp-outline me-2" href="dashboard.html">Dashboard</a>
+            <button class="btn btn-pp-outline" onclick="Auth.logout()">Logout</button>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4" style="max-width: 700px;">
+    <h3 class="mb-4">My Profile</h3>
+
+    <div class="card-pp card-pp-body mb-4">
+        <h6 class="mb-3">Account Details</h6>
+        <form id="profileForm">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="name" class="form-control form-control-pp">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="email" class="form-control form-control-pp" disabled>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">College</label>
+                    <input type="text" id="college" class="form-control form-control-pp" placeholder="Sri Krishna College of Technology">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Department</label>
+                    <input type="text" id="department" class="form-control form-control-pp" placeholder="CSE (IoT)">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Year</label>
+                    <input type="text" id="year" class="form-control form-control-pp" placeholder="Final Year">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-pp-primary mt-4">Update Profile</button>
+        </form>
+    </div>
+
+    <div class="card-pp card-pp-body">
+        <h6 class="mb-3">Change Password</h6>
+        <form id="passwordForm">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Current Password</label>
+                    <input type="password" id="currentPassword" class="form-control form-control-pp" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">New Password</label>
+                    <input type="password" id="newPassword" class="form-control form-control-pp" minlength="6" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-pp-outline mt-4">Change Password</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
+<script>
+Auth.requireAuth();
+
+async function loadProfile() {
+    try {
+        const profile = await apiRequest("/profile");
+        document.getElementById("name").value = profile.name || "";
+        document.getElementById("email").value = profile.email || "";
+        document.getElementById("college").value = profile.college || "";
+        document.getElementById("department").value = profile.department || "";
+        document.getElementById("year").value = profile.year || "";
+    } catch (err) {
+        showToast(err.message, "error");
+    }
+}
+loadProfile();
+
+document.getElementById("profileForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        await apiRequest("/profile", {
+            method: "PUT",
+            body: {
+                name: document.getElementById("name").value,
+                college: document.getElementById("college").value,
+                department: document.getElementById("department").value,
+                year: document.getElementById("year").value
+            }
+        });
+        showToast("Profile updated!", "success");
+    } catch (err) {
+        showToast(err.message, "error");
+    }
+});
+
+document.getElementById("passwordForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        await apiRequest("/profile/password", {
+            method: "PUT",
+            body: {
+                currentPassword: document.getElementById("currentPassword").value,
+                newPassword: document.getElementById("newPassword").value
+            }
+        });
+        showToast("Password changed successfully!", "success");
+        document.getElementById("passwordForm").reset();
+    } catch (err) {
+        showToast(err.message, "error");
+    }
+});
+</script>
+</body>
+</html>

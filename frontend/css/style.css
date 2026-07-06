@@ -1,0 +1,300 @@
+/* ============================================
+   PlacementPrep — Design Tokens
+   Blue & White theme, modern, minimal, rounded cards
+   ============================================ */
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --primary-light: #dbeafe;
+    --accent: #0ea5e9;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #f59e0b;
+
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+
+    --shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.10);
+
+    --font-display: 'Poppins', 'Segoe UI', sans-serif;
+    --font-body: 'Inter', 'Segoe UI', sans-serif;
+}
+
+[data-theme="dark"] {
+    --bg: #0b1220;
+    --surface: #111a2e;
+    --text: #eef2f9;
+    --text-muted: #93a0b8;
+    --border: #1f2b45;
+    --primary-light: #16244a;
+    --shadow: 0 4px 16px rgba(0,0,0,0.35);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.5);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+h1, h2, h3, h4, .brand {
+    font-family: var(--font-display);
+    font-weight: 600;
+}
+
+a { text-decoration: none; }
+
+/* ---------- Navbar ---------- */
+.navbar-pp {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-pp .brand {
+    color: var(--primary);
+    font-size: 1.4rem;
+}
+
+.navbar-pp .nav-link {
+    color: var(--text);
+    font-weight: 500;
+}
+
+.navbar-pp .nav-link:hover,
+.navbar-pp .nav-link.active {
+    color: var(--primary);
+}
+
+/* ---------- Buttons ---------- */
+.btn-pp-primary {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 1.4rem;
+    font-weight: 600;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn-pp-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    color: #fff;
+}
+
+.btn-pp-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 1.5px solid var(--primary);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 1.3rem;
+    font-weight: 600;
+    transition: all 0.15s ease;
+}
+
+.btn-pp-outline:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+/* ---------- Cards ---------- */
+.card-pp {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-pp:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-pp-body { padding: 1.5rem; }
+
+/* ---------- Hero ---------- */
+.hero-pp {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    color: #fff;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    padding: 5rem 1rem 6rem;
+}
+
+.hero-pp h1 { font-size: 2.75rem; }
+
+/* ---------- Category chips ---------- */
+.category-chip {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border-radius: 999px;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* ---------- Stat card ---------- */
+.stat-card {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.stat-card .stat-value {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stat-card .stat-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+/* ---------- Auth forms ---------- */
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-light), var(--bg));
+}
+
+.auth-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 440px;
+}
+
+.form-control-pp {
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    padding: 0.65rem 0.9rem;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.form-control-pp:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+    outline: none;
+}
+
+/* ---------- Quiz ---------- */
+.quiz-option {
+    display: block;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.6rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: var(--surface);
+}
+
+.quiz-option:hover { border-color: var(--primary); }
+.quiz-option.selected {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    font-weight: 600;
+}
+
+.palette-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 600;
+}
+
+.palette-btn.answered { background: var(--success); color: #fff; border-color: var(--success); }
+.palette-btn.skipped { background: var(--warning); color: #fff; border-color: var(--warning); }
+.palette-btn.bookmarked { box-shadow: 0 0 0 2px var(--accent); }
+.palette-btn.current { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
+
+.timer-pill {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.4rem 1.1rem;
+    font-weight: 700;
+    font-family: monospace;
+    font-size: 1.1rem;
+}
+
+/* ---------- Progress bar ---------- */
+.progress-pp {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--border);
+    overflow: hidden;
+}
+.progress-pp-bar {
+    height: 100%;
+    background: var(--primary);
+    transition: width 0.3s ease;
+}
+
+/* ---------- Result review ---------- */
+.review-correct { border-left: 4px solid var(--success); }
+.review-wrong { border-left: 4px solid var(--danger); }
+.review-skipped { border-left: 4px solid var(--warning); }
+
+/* ---------- Toast ---------- */
+.pp-toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--text);
+    color: #fff;
+    padding: 0.8rem 1.2rem;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-lg);
+    z-index: 2000;
+    animation: fadeInUp 0.25s ease;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Utility ---------- */
+.text-muted-pp { color: var(--text-muted); }
+.rounded-pp { border-radius: var(--radius-md); }
+
+.spinner-pp {
+    width: 40px; height: 40px;
+    border: 4px solid var(--primary-light);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
